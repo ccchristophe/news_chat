@@ -12,7 +12,7 @@ app.get("/", function (req, res){
 });
 
 //config socket.io
-var server = app.listen(3011);
+var server = app.listen(8000);
 var io = require("socket.io").listen(server);
 
 // var messamessages = [];

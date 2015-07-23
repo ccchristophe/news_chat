@@ -30,14 +30,6 @@
 			}
 
 			person = ask();
-			// console.log('ejje' + person);
-			// if(!person){
-			// 	ask();
-			// }
-
-			// if(person == ''){
-			// 	ask();
-			// }
 
 			console.log(person);
 			socket.emit("newUser", {"name":person});
@@ -112,12 +104,7 @@
 
 	<div class="container">
 		<div class="row">
-			
-<!-- 			<div class="col-md-11 col-md-offset-1">
-				<marquee scrollamount="15" onmouseover="this.stop()" onmouseout="this.start()">
-					<h1 id='abcMarqueeText'></h1>
-				</marquee>
-			</div> -->
+
 			<div class="col-md-12 jumbotron">
 				<h1 class="col-md-6 col-md-offset-4">News Chat</h1>
 			</div>
