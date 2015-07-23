@@ -1,0 +1,140 @@
+<html>
+<head>
+	<title>News Chat</title>
+
+	<!-- bootstrap and jQuery-->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<!-- <link rel="stylesheet" type="text/css" href="../css/warriors_talk.css"> -->
+	<link rel="stylesheet" type="text/css" href="./static/stylesheet.css">
+	<!-- socket.io -->
+	<script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+	<!-- font awesome -->
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	<!-- google feed api -->
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			//trigger connection event to server
+			var socket = io.connect();
+			//prompt after socket var
+
+			function ask(){
+				person = prompt("Your name:");
+				if (!person){
+					ask();
+				}
+				return person;
+			}
+
+			person = ask();
+			// console.log('ejje' + person);
+			// if(!person){
+			// 	ask();
+			// }
+
+			// if(person == ''){
+			// 	ask();
+			// }
+
+			console.log(person);
+			socket.emit("newUser", {"name":person});
+			//-------------prompt socket start
+			socket.on('logingIn', function (userDetails){
+				console.log(userDetails);
+				$("#chatSpace").append("<p>"+userDetails.username+" has entered the chatroom</p>");
+			});
+			// hidden
+			socket.on('newUserLogingIn', function (userDetails){
+				$("#userName").val(userDetails.username);
+				console.log(userDetails.username);
+				$("#chatSpace").append("<p id='loggedIn'>"+userDetails.username+" has logged in.</p>");
+			});
+			//-------------prompt socket end
+			//-------------message socket start
+			$("#messageText").keydown(function (enter){
+				if(enter.keyCode == 13){
+					socket.emit("newMessage", {userName:$("#userName").val(), newMessage: $("#messageText").val()});
+					console.log($("#messageText").val());
+					$(this).val("");
+				}
+			});
+
+			socket.on("everyone_message", function (messages){
+				console.log(messages);
+				$("#chatSpace").append("<div id='other_align'><p id='other'>"+messages.messages.userName +" : "+ messages.messages.newMessage+"</p><p id='blank'></p></div>");
+				
+				// scrolling position-bottom
+				var messageSpace = document.getElementById("chatSpace");
+				messageSpace.scrollTop = messageSpace.scrollHeight;
+			});
+			
+			socket.on("one_message", function (messages){
+				console.log(messages);
+				$("#chatSpace").append("<div id='message_align'><p id='message'>"+messages.messages.userName +" : "+ messages.messages.newMessage+"</p><p id='blank'></p></div>");
+				
+				// scrolling position-bottom
+				var messageSpace = document.getElementById("chatSpace");
+				messageSpace.scrollTop = messageSpace.scrollHeight;
+			});
+			//-------------message socket end
+			
+		});
+			google.load("feeds", "1");
+
+			function initialize() {
+
+				var feed = new google.feeds.Feed("http://feeds.abcnews.com/abcnews/topstories");
+				feed.load(function(result) {
+					console.log(result);
+
+					var abcMarqueeText = '';
+
+						if (!result.error) {
+						for (var i = 0; i < result.feed.entries.length; i++) {
+							var entry = result.feed.entries[i];
+							console.log(entry.title);
+							console.log(entry.content);
+							abcMarqueeText += "<h4><a href ='" + entry.link + "'>" + entry.title + "</a></h4>" + "<p id='black'>" + entry.content + "</p>";
+						}
+					}
+					document.getElementById('abcMarqueeText').innerHTML = abcMarqueeText;
+				});
+			}
+
+			google.setOnLoadCallback(initialize);
+
+	</script>
+</head>
+<body bg-color: "black">
+
+	<div class="container">
+		<div class="row">
+			
+<!-- 			<div class="col-md-11 col-md-offset-1">
+				<marquee scrollamount="15" onmouseover="this.stop()" onmouseout="this.start()">
+					<h1 id='abcMarqueeText'></h1>
+				</marquee>
+			</div> -->
+			<div class="col-md-12 jumbotron">
+				<h1 class="col-md-6 col-md-offset-4">News Chat</h1>
+			</div>
+
+			<div class="col-md-6">
+				<p id='abcMarqueeText'></p>
+			</div>
+
+			<div class="col-md-6">
+				<div id="chatSpace"></div><br>
+
+				<input type="text" placeholder="Did you hear..." id="messageText" class="col-md-6 col-md-offset-3">
+				<input type="hidden" id="userName">
+				<button id="send">Send</button>
+			</div>
+
+		</div>
+	</div>
+</body>
+</html>

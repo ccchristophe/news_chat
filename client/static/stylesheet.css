@@ -1,0 +1,69 @@
+body {
+	background-image: url("images/background.jpg");
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+h1{
+	color: white;
+}
+.img-circle{
+	width: 110px;
+	height: 110px;
+	-webkit-filter: grayscale(100%);
+}
+#chatSpace{
+	height: 400px;
+	background: silver;
+	background-position: center;
+	background-size: 100%;
+	-webkit-filter: grayscale(50%);
+	overflow: scroll;
+/*	text-align: right;*/
+	border-radius: 3px;
+}
+
+#abcMarqueeText{
+	color:white;
+}
+
+#message_align{
+	text-align: right;
+}
+#message{
+	color: black;
+	border: solid 1px #61CC61;
+	background: url("images/chat_user.png") repeat-x;
+	opacity: 0.9;
+	border-radius: 8px;
+	padding: 3px;
+	display: inline;
+}
+#blank{
+	padding: 5px;
+	margin: 0;
+}
+#other_align{
+	text-align: left;
+}
+#other{
+	color: black;
+	border: solid 1px #56A8B9;
+	background: url("images/chat_user2.png") repeat-x;
+	opacity: 0.9;
+	border-radius: 8px;
+	padding: 3px;
+	display: inline;
+}
+#loggedIn{
+	font-weight: bold;
+}
+
+#black{
+	color:black;
+}
+.jumbotron{
+	background:transparent;
+	color: white;
+}
